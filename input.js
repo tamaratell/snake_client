@@ -1,37 +1,47 @@
 const { stdin } = require('process');
-
-const handleUserInput = (input, conn) => {
-  switch (input) {
-
-    case 'w':
-      break;
-
-    case 'a':
-      break;
-
-    case 's':
-      break;
-
-    case 'd':
-      break;
-
-    case 'q':
-      console.log("Exiting...");
-      conn.end();
-      process.exit();
-
-  }
-};
-
+let connection;
 
 //setup interface to play
 const setupInput = (conn) => {
+  connection = conn;
   const stdin = process.stdin;
   stdin.setRawMode(true);
   stdin.setEncoding('utf-8');
   stdin.resume();
-  stdin.on('data', (input) => handleUserInput(input, conn));
+  stdin.on('data', handleUserInput);
   return stdin;
 };
 
-module.exports = setupInput;
+const handleUserInput = (data) => {
+  switch (data) {
+
+    case 'w':
+      connection.write("Move: up");
+      break;
+
+    case 'a':
+      connection.write("Move: left");
+      break;
+
+    case 's':
+      connection.write("Move: down");
+      break;
+
+    case 'd':
+      connection.write("Move: right");
+      break;
+
+    case 'q':
+      console.log("Exiting...");
+      process.exit();
+
+    case '1':
+      connection.write("Say: Wassupppp");
+
+  }
+
+};
+
+
+
+module.exports = { setupInput };
